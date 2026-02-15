@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CBSE NCERT Doubt Solver</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <aside class="subject-panel">
+        <p class="eyebrow">CBSE Classes 6-10</p>
+        <h1>NCERT Doubt Bots</h1>
+        <p class="panel-copy">
+          Choose a subject bot, class, and chapter. Ask any textbook doubt and get exam-ready help.
+        </p>
+
+        <div class="subject-list" role="tablist" aria-label="Subject chatbots">
+          <button class="subject-btn is-active" data-subject="maths" role="tab" aria-selected="true">
+            <span class="subject-name">Maths Bot</span>
+            <span class="subject-tag">Practice + steps</span>
+          </button>
+          <button class="subject-btn" data-subject="science" role="tab" aria-selected="false">
+            <span class="subject-name">Science Bot</span>
+            <span class="subject-tag">Concept + diagrams</span>
+          </button>
+          <button class="subject-btn" data-subject="social" role="tab" aria-selected="false">
+            <span class="subject-name">Social Science Bot</span>
+            <span class="subject-tag">History + Civics + Geo</span>
+          </button>
+          <button class="subject-btn" data-subject="english" role="tab" aria-selected="false">
+            <span class="subject-name">English Bot</span>
+            <span class="subject-tag">Grammar + literature</span>
+          </button>
+        </div>
+      </aside>
+
+      <section class="chat-panel" aria-live="polite">
+        <header class="chat-topbar">
+          <div>
+            <p class="chat-label" id="botLabel">Maths Bot</p>
+            <h2 id="botTitle">Class 6 NCERT Helper</h2>
+            <p class="api-status" id="apiStatus">AI mode: Local fallback</p>
+          </div>
+          <div class="control-grid">
+            <label class="class-picker">
+              <span>Class</span>
+              <select id="classSelect" aria-label="Select class">
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+              </select>
+            </label>
+            <label class="class-picker">
+              <span>Chapter</span>
+              <select id="chapterSelect" aria-label="Select chapter"></select>
+            </label>
+            <button class="export-btn" id="exportPdf" type="button">Export Chat PDF</button>
+          </div>
+        </header>
+
+        <div class="quick-prompts" id="quickPrompts"></div>
+
+        <div class="chat-window" id="chatWindow"></div>
+
+        <form class="chat-input" id="chatForm">
+          <label for="userInput" class="sr-only">Ask your doubt</label>
+          <input
+            id="userInput"
+            type="text"
+            placeholder="Type your NCERT doubt..."
+            autocomplete="off"
+            required
+          />
+          <button type="submit" id="askButton">Ask</button>
+        </form>
+      </section>
+    </main>
+
+    <script type="module" src="snake.js"></script>
+  </body>
+</html>

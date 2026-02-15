@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: cbse-ncert-doubt-bots
+    env: node
+    plan: free
+    buildCommand: "echo 'No build step required'"
+    startCommand: "npm start"
+    autoDeploy: true
+    envVars:
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-4.1-mini
+      - key: HOST
+        value: 0.0.0.0
+      - key: PORT
+        value: 10000
