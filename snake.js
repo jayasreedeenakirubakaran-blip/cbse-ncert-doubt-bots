@@ -160,7 +160,6 @@ const exportPdfButton = document.getElementById("exportPdf");
 const subjectButtons = [...document.querySelectorAll(".subject-btn")];
 
 let currentSubject = "maths";
-let aiMode = "local";
 const chatState = {};
 
 function stateKey(subject, classNo, chapter) {
@@ -305,47 +304,8 @@ function buildLocalReply(question, subject, classNo, chapter) {
   }
 }
 
-function getSystemPrompt(subject, classNo, chapter) {
-  const chapterLine = chapter === "all" ? "All chapters in scope" : `Focus chapter: ${chapter}`;
-  return [
-    "You are a CBSE NCERT tutor for Indian school students.",
-    `Subject: ${SUBJECTS[subject].label}`,
-    `Class: ${classNo}`,
-    chapterLine,
-    "Explain answers in simple language suitable for class 6-10.",
-    "Always align with NCERT style and terminology.",
-    "Give step-by-step method for Maths and pointwise answers for theory subjects.",
-    "If unclear question, ask one clarifying follow-up question.",
-    "Avoid harmful, unsafe, or non-academic content.",
-  ].join("\n");
-}
-
-async function getAiReply(question, subject, classNo, chapter, history) {
-  const response = await fetch("/api/chat", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      systemPrompt: getSystemPrompt(subject, classNo, chapter),
-      question,
-      history: history.slice(-8),
-    }),
-  });
-
-  if (!response.ok) {
-    const text = await response.text();
-    throw new Error(text || `API failed (${response.status})`);
-  }
-
-  const data = await response.json();
-  if (!data.reply || typeof data.reply !== "string") {
-    throw new Error("Invalid AI response payload");
-  }
-  return data.reply;
-}
-
-function setApiStatus(mode) {
-  aiMode = mode;
-  apiStatus.textContent = mode === "online" ? "AI mode: OpenAI backend connected" : "AI mode: Local fallback";
+function setApiStatus() {
+  apiStatus.textContent = "Mode: Offline NCERT tutor (free)";
 }
 
 function setLoading(loading) {
@@ -454,22 +414,14 @@ form.addEventListener("submit", async (event) => {
 
   const classNo = Number(classSelect.value);
   const chapter = getSelectedChapter();
-  const history = ensureHistory(currentSubject, classNo, chapter);
 
   setLoading(true);
-  try {
-    const answer = await getAiReply(question, currentSubject, classNo, chapter, history);
-    setApiStatus("online");
-    pushMessage("bot", answer);
-  } catch (_error) {
-    setApiStatus("local");
-    const fallback = buildLocalReply(question, currentSubject, classNo, chapter);
-    pushMessage("bot", `${fallback}\n\n(Using local fallback response.)`);
-  } finally {
-    setLoading(false);
-  }
+  const answer = buildLocalReply(question, currentSubject, classNo, chapter);
+  pushMessage("bot", answer);
+  setLoading(false);
 });
 
+setApiStatus();
 setActiveTheme();
 populateChapterOptions();
 renderMessages();
